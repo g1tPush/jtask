@@ -22,7 +22,7 @@ public class TranslationControllerImpl implements TranslationController {
         this.translationServiceImpl = translationServiceImpl;
     }
 
-    @PostMapping("/translate")
+    @PostMapping("/translations")
     public TranslationRequestInfoDto translate(@RequestBody TranslationDto translationDto, HttpServletRequest request) throws JsonProcessingException {
 
         String clientIpAddress = request.getRemoteAddr();
