@@ -32,13 +32,8 @@ public class TranslationControllerImpl implements TranslationController {
                 clientIpAddress
         );
 
-        TranslationRequestInfoDto translationRequestInfoDto = TranslationRequestInfoDto.builder()
-                .id(translationRequestInfo.getId())
-                .ipAddress(translationRequestInfo.getIpAddress())
-                .originalStringToTranslate(translationRequestInfo.getOriginalStringToTranslate())
+        return TranslationRequestInfoDto.builder()
                 .translatedString(translationRequestInfo.getTranslatedString())
                 .build();
-
-        return translationRequestInfoDto;
     }
 }
