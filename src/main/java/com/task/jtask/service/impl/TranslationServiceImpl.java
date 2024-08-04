@@ -19,7 +19,8 @@ public class TranslationServiceImpl implements TranslationService {
 
     private final TranslationRequestService translationRequestService;
     private final TranslationRepository translationRepository;
-    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final int threadPoolSize = 10;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
     TranslationServiceImpl(TranslationRepository translationRepository, TranslationRequestService translationRequestService) {
         this.translationRepository = translationRepository;
@@ -27,6 +28,18 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     public TranslationRequestInfo translate(TranslationDto translationDto, String ipAddress) {
+        String translatedText = translateText(translationDto);
+
+        TranslationRequestInfo translationRequestInfo = TranslationRequestInfo.builder()
+                .ipAddress(ipAddress)
+                .originalStringToTranslate(translationDto.getText())
+                .translatedString(translatedText)
+                .build();
+
+        return translationRepository.saveTranslation(translationRequestInfo);
+    }
+
+    private String translateText(TranslationDto translationDto) {
         String[] words = translationDto.getText().split(" ");
         CompletableFuture<TranslationResponse>[] futures = new CompletableFuture[words.length];
 
@@ -58,13 +71,7 @@ public class TranslationServiceImpl implements TranslationService {
             }
         }
 
-        TranslationRequestInfo translationRequestInfo = TranslationRequestInfo.builder()
-                .ipAddress(ipAddress)
-                .originalStringToTranslate(translationDto.getText())
-                .translatedString(translatedText.toString())
-                .build();
-
-        return translationRepository.saveTranslation(translationRequestInfo);
+        return translatedText.toString();
     }
 
 }
