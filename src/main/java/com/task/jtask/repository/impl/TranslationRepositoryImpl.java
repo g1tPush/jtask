@@ -1,7 +1,9 @@
 package com.task.jtask.repository.impl;
 
 import com.task.jtask.entity.TranslationRequestInfo;
+import com.task.jtask.exceptions.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -24,13 +26,17 @@ public class TranslationRepositoryImpl implements TranslationRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-            var ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, ipAddress);
-            ps.setString(2, originalStringToTranslate);
-            ps.setString(3, translatedString);
-            return ps;
-        }, keyHolder);
+        try {
+            jdbcTemplate.update(connection -> {
+                var ps = connection.prepareStatement(sql, new String[]{"id"});
+                ps.setString(1, ipAddress);
+                ps.setString(2, originalStringToTranslate);
+                ps.setString(3, translatedString);
+                return ps;
+            }, keyHolder);
+        } catch (DataAccessException e) {
+            throw new GlobalException(e.getMessage());
+        }
 
         Long generatedId = keyHolder.getKey().longValue();
 

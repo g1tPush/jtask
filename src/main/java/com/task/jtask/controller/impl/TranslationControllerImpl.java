@@ -1,6 +1,5 @@
 package com.task.jtask.controller.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.task.jtask.controller.TranslationController;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.dto.TranslationRequestInfoDto;
@@ -23,7 +22,7 @@ public class TranslationControllerImpl implements TranslationController {
     }
 
     @PostMapping("/translations")
-    public TranslationRequestInfoDto translate(@RequestBody TranslationDto translationDto, HttpServletRequest request) throws JsonProcessingException {
+    public TranslationRequestInfoDto translate(@RequestBody TranslationDto translationDto, HttpServletRequest request) {
 
         String clientIpAddress = request.getRemoteAddr();
 

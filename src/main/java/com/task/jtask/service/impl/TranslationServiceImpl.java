@@ -3,6 +3,7 @@ package com.task.jtask.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.entity.TranslationRequestInfo;
+import com.task.jtask.exceptions.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
 import com.task.jtask.response.TranslationResponse;
 import com.task.jtask.service.TranslationRequestService;
@@ -50,13 +51,7 @@ public class TranslationServiceImpl implements TranslationService {
                     .sourceLanguageCode(translationDto.getSourceLanguageCode())
                     .build();
 
-            futures[i] = CompletableFuture.supplyAsync(() -> {
-                try {
-                    return translationRequestService.translate(translationDtoText);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }, executorService);
+            futures[i] = CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationDtoText), executorService);
         }
 
         StringBuilder translatedText = new StringBuilder();
@@ -67,7 +62,7 @@ public class TranslationServiceImpl implements TranslationService {
             try {
                 translatedText.append(future.get().getTranslations().get(0).getText()).append(" ");
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                throw new GlobalException("Parsing error");
             }
         }
 

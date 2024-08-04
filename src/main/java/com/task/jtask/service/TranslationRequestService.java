@@ -5,5 +5,5 @@ import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.response.TranslationResponse;
 
 public interface TranslationRequestService {
-    TranslationResponse translate(TranslationDto translationDto) throws JsonProcessingException;
+    TranslationResponse translate(TranslationDto translationDto);
 }

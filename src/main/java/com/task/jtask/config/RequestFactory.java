@@ -1,8 +1,8 @@
 package com.task.jtask.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.jtask.dto.TranslationDto;
+import com.task.jtask.exceptions.GlobalException;
 import com.task.jtask.request.TranslationRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,20 +22,24 @@ public class RequestFactory {
         this.objectMapper = objectMapper;
     }
 
-    public HttpEntity<String> createTranslationRequestEntity(TranslationDto translationDto) throws JsonProcessingException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Api-Key " + apiConfig.getApiKey());
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    public HttpEntity<String> createTranslationRequestEntity(TranslationDto translationDto) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Api-Key " + apiConfig.getApiKey());
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        TranslationRequest translationRequest = new TranslationRequest(
-                apiConfig.getFolderId(),
-                List.of(translationDto.getText()),
-                translationDto.getTargetLanguageCode(),
-                translationDto.getSourceLanguageCode()
-        );
+            TranslationRequest translationRequest = new TranslationRequest(
+                    apiConfig.getFolderId(),
+                    List.of(translationDto.getText()),
+                    translationDto.getTargetLanguageCode(),
+                    translationDto.getSourceLanguageCode()
+            );
 
-        String requestBody = objectMapper.writeValueAsString(translationRequest);
+            String requestBody = objectMapper.writeValueAsString(translationRequest);
 
-        return new HttpEntity<>(requestBody, headers);
+            return new HttpEntity<>(requestBody, headers);
+        } catch (Exception e) {
+            throw new GlobalException("Parsing error");
+        }
     }
 }
