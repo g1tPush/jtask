@@ -1,6 +1,5 @@
 package com.task.jtask.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.entity.TranslationRequestInfo;
 import com.task.jtask.exceptions.GlobalException;
