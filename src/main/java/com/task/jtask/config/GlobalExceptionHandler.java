@@ -1,7 +1,7 @@
 package com.task.jtask.config;
 
 import com.task.jtask.exceptions.GlobalException;
-import com.task.jtask.exceptions.WrongLanguageCodeException;
+import com.task.jtask.exceptions.YandexApiTranslationException;
 import com.task.jtask.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(WrongLanguageCodeException.class)
-    public ResponseEntity<ErrorResponse> yandexApiException(WrongLanguageCodeException ex) {
+    @ExceptionHandler(YandexApiTranslationException.class)
+    public ResponseEntity<ErrorResponse> yandexApiException(YandexApiTranslationException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, ex.getHttpStatusCode());
     }

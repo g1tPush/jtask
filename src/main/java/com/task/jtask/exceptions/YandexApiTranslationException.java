@@ -2,9 +2,9 @@ package com.task.jtask.exceptions;
 
 import org.springframework.http.HttpStatusCode;
 
-public class WrongLanguageCodeException extends RuntimeException {
+public class YandexApiTranslationException extends RuntimeException {
     private final HttpStatusCode httpStatusCode;
-    public WrongLanguageCodeException(String message, HttpStatusCode status) {
+    public YandexApiTranslationException(String message, HttpStatusCode status) {
         super(message);
         this.httpStatusCode = status;
     }

@@ -6,7 +6,7 @@ import com.task.jtask.config.ApiConfig;
 import com.task.jtask.config.RequestFactory;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.exceptions.GlobalException;
-import com.task.jtask.exceptions.WrongLanguageCodeException;
+import com.task.jtask.exceptions.YandexApiTranslationException;
 import com.task.jtask.response.TranslationResponse;
 import com.task.jtask.service.TranslationRequestService;
 import org.springframework.http.HttpEntity;
@@ -33,7 +33,7 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
     public TranslationResponse translate(TranslationDto translationDto) {
         try {
             HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationDto);
-            
+
             ResponseEntity<TranslationResponse> response = restTemplate.exchange(
                     apiConfig.URL,
                     HttpMethod.POST,
@@ -54,7 +54,7 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
                 throw new GlobalException("Parsing error");
             }
 
-            throw new WrongLanguageCodeException(message, e.getStatusCode());
+            throw new YandexApiTranslationException(message, e.getStatusCode());
         }
     }
 }
