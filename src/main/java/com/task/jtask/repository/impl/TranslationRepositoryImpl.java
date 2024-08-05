@@ -11,20 +11,19 @@ import java.sql.*;
 @Repository
 public class TranslationRepositoryImpl implements TranslationRepository {
     private final DataSource dataSource;
+    private final static String sqlQuery = "INSERT INTO translations (ip_address, original_string_to_translate, translated_string) VALUES (?, ?, ?)";
 
     public TranslationRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public TranslationRequestInfo saveTranslation(TranslationRequestInfo translationRequestInfo) {
-        String sql = "INSERT INTO translations (ip_address, original_string_to_translate, translated_string) VALUES (?, ?, ?)";
-
         String ipAddress = translationRequestInfo.getIpAddress();
         String originalStringToTranslate = translationRequestInfo.getOriginalStringToTranslate();
         String translatedString = translationRequestInfo.getTranslatedString();
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, ipAddress);
             ps.setString(2, originalStringToTranslate);
