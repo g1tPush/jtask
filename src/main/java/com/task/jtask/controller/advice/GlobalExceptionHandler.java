@@ -1,4 +1,4 @@
-package com.task.jtask.config;
+package com.task.jtask.controller.advice;
 
 import com.task.jtask.exceptions.GlobalException;
 import com.task.jtask.exceptions.YandexApiTranslationException;
