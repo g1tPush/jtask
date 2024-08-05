@@ -1,9 +1,8 @@
 package com.task.jtask.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.response.TranslationResponse;
+import com.task.jtask.dto.TranslationResponseDto;
 
 public interface TranslationRequestService {
-    TranslationResponse translate(TranslationDto translationDto);
+    TranslationResponseDto translate(TranslationDto translationDto);
 }

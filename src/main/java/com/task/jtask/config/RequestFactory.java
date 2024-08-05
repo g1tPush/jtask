@@ -3,7 +3,7 @@ package com.task.jtask.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.exception.GlobalException;
-import com.task.jtask.request.TranslationRequest;
+import com.task.jtask.dto.TranslationRequestDto;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,14 +28,14 @@ public class RequestFactory {
             headers.set("Authorization", "Api-Key " + apiConfig.getApiKey());
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            TranslationRequest translationRequest = new TranslationRequest(
+            TranslationRequestDto translationRequestDto = new TranslationRequestDto(
                     apiConfig.getFolderId(),
                     List.of(translationDto.getText()),
                     translationDto.getTargetLanguageCode(),
                     translationDto.getSourceLanguageCode()
             );
 
-            String requestBody = objectMapper.writeValueAsString(translationRequest);
+            String requestBody = objectMapper.writeValueAsString(translationRequestDto);
 
             return new HttpEntity<>(requestBody, headers);
         } catch (Exception e) {

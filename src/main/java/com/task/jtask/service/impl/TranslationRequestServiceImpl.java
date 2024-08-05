@@ -7,7 +7,7 @@ import com.task.jtask.config.RequestFactory;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
-import com.task.jtask.response.TranslationResponse;
+import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -31,15 +31,15 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
         this.apiConfig = apiConfig;
     }
 
-    public TranslationResponse translate(TranslationDto translationDto) {
+    public TranslationResponseDto translate(TranslationDto translationDto) {
         try {
             HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationDto);
 
-            ResponseEntity<TranslationResponse> response = restTemplate.exchange(
+            ResponseEntity<TranslationResponseDto> response = restTemplate.exchange(
                     apiConfig.getApiUrl(),
                     HttpMethod.POST,
                     entity,
-                    TranslationResponse.class
+                    TranslationResponseDto.class
             );
 
             return response.getBody();

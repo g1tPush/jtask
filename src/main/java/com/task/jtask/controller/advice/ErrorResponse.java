@@ -1,4 +1,4 @@
-package com.task.jtask.response;
+package com.task.jtask.controller.advice;
 
 
 import lombok.Data;

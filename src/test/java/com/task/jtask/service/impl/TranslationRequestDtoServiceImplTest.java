@@ -5,7 +5,7 @@ import com.task.jtask.config.RequestFactory;
 import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
-import com.task.jtask.response.TranslationResponse;
+import com.task.jtask.dto.TranslationResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TranslationRequestServiceImplTest {
+class TranslationRequestDtoServiceImplTest {
     @Mock
     private ApiConfig apiConfig;
 
@@ -59,17 +59,17 @@ class TranslationRequestServiceImplTest {
 
     @Test
     void translate_Success() {
-        TranslationResponse.Translation translation = new TranslationResponse.Translation("Hola");
-        TranslationResponse expectedResponse = new TranslationResponse(Collections.singletonList(translation));
+        TranslationResponseDto.Translation translation = new TranslationResponseDto.Translation("Hola");
+        TranslationResponseDto expectedResponse = new TranslationResponseDto(Collections.singletonList(translation));
 
         when(restTemplate.exchange(
                 anyString(),
                 eq(HttpMethod.POST),
                 any(HttpEntity.class),
-                eq(TranslationResponse.class)
+                eq(TranslationResponseDto.class)
         )).thenReturn(ResponseEntity.ok(expectedResponse));
 
-        TranslationResponse actualResponse = translationRequestService.translate(getTranslationDto());
+        TranslationResponseDto actualResponse = translationRequestService.translate(getTranslationDto());
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals("Hola", actualResponse.getTranslations().get(0).getText());
@@ -87,7 +87,7 @@ class TranslationRequestServiceImplTest {
                 anyString(),
                 eq(HttpMethod.POST),
                 any(HttpEntity.class),
-                eq(TranslationResponse.class)
+                eq(TranslationResponseDto.class)
         )).thenThrow(clientException);
 
         YandexApiTranslationException exception = assertThrows(YandexApiTranslationException.class, () -> {
@@ -109,7 +109,7 @@ class TranslationRequestServiceImplTest {
                 anyString(),
                 eq(HttpMethod.POST),
                 any(HttpEntity.class),
-                eq(TranslationResponse.class)
+                eq(TranslationResponseDto.class)
         )).thenThrow(serverException);
 
         GlobalException exception = assertThrows(GlobalException.class, () -> {
@@ -129,7 +129,7 @@ class TranslationRequestServiceImplTest {
                 anyString(),
                 eq(HttpMethod.POST),
                 any(HttpEntity.class),
-                eq(TranslationResponse.class)
+                eq(TranslationResponseDto.class)
         )).thenThrow(clientException);
 
         GlobalException exception = assertThrows(GlobalException.class, () -> {

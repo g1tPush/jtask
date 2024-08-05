@@ -4,7 +4,7 @@ import com.task.jtask.dto.TranslationDto;
 import com.task.jtask.model.TranslationRequestInfo;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
-import com.task.jtask.response.TranslationResponse;
+import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
 import com.task.jtask.service.TranslationService;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class TranslationServiceImpl implements TranslationService {
                 .filter(word -> !word.isEmpty())
                 .toList();
 
-        List<CompletableFuture<TranslationResponse>> futures = new ArrayList<>(Collections.nCopies(words.size(), null));
+        List<CompletableFuture<TranslationResponseDto>> futures = new ArrayList<>(Collections.nCopies(words.size(), null));
 
         for (int i = 0; i < words.size(); i++) {
             TranslationDto translationDtoText = TranslationDto.builder()
@@ -64,7 +64,7 @@ public class TranslationServiceImpl implements TranslationService {
 
         CompletableFuture.allOf(futures.get(0)).join();
 
-        for (CompletableFuture<TranslationResponse> future : futures) {
+        for (CompletableFuture<TranslationResponseDto> future : futures) {
             try {
                 translatedText.append(future.get().getTranslations().get(0).getText()).append(" ");
             } catch (InterruptedException | ExecutionException e) {
