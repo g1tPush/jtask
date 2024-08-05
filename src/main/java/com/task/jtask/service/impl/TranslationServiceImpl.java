@@ -9,6 +9,7 @@ import com.task.jtask.service.TranslationRequestService;
 import com.task.jtask.service.TranslationService;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -40,7 +41,9 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     private String translateText(TranslationDto translationDto) {
-        String[] words = translationDto.getText().split(" ");
+        String[] words = Arrays.stream(translationDto.getText().split(" "))
+                .filter(word -> !word.isEmpty())
+                .toArray(String[]::new);;
         CompletableFuture<TranslationResponse>[] futures = new CompletableFuture[words.length];
 
         for (int i = 0; i < words.length; i++) {
@@ -65,7 +68,7 @@ public class TranslationServiceImpl implements TranslationService {
             }
         }
 
-        return translatedText.toString();
+        return translatedText.toString().trim();
     }
 
 }
