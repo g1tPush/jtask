@@ -31,7 +31,7 @@ public class TranslationServiceImpl implements TranslationService {
         this.translationRequestService = translationRequestService;
     }
 
-    public TranslationRequestInfo translate(TranslationDto translationDto, String ipAddress) {
+    public TranslationRequestInfo handleTranslationRequest(TranslationDto translationDto, String ipAddress) {
         String translatedText = translateText(translationDto);
 
         TranslationRequestInfo translationRequestInfo = TranslationRequestInfo.builder()

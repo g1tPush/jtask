@@ -27,7 +27,7 @@ public class TranslationControllerImpl implements TranslationController {
 
         String clientIpAddress = request.getRemoteAddr();
 
-        TranslationRequestInfo translationRequestInfo = translationServiceImpl.translate(
+        TranslationRequestInfo translationRequestInfo = translationServiceImpl.handleTranslationRequest(
                 translationDto,
                 clientIpAddress
         );
