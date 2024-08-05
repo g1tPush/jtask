@@ -1,7 +1,7 @@
 package com.task.jtask.repository;
 
-import com.task.jtask.model.TranslationRequestInfo;
+import com.task.jtask.model.TranslationRecord;
 
 public interface TranslationRepository {
-    TranslationRequestInfo saveTranslation(TranslationRequestInfo translationRequestInfo);
+    TranslationRecord saveTranslation(TranslationRecord translationRecord);
 }

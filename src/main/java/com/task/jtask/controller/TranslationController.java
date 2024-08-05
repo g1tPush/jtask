@@ -1,10 +1,10 @@
 package com.task.jtask.controller;
 
 
-import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.dto.TranslationRequestInfoDto;
+import com.task.jtask.dto.TranslationInputDto;
+import com.task.jtask.dto.TranslationRecordDto;
 import jakarta.servlet.http.HttpServletRequest;
 
 public interface TranslationController {
-    TranslationRequestInfoDto translate(TranslationDto translationRequestInfoDto, HttpServletRequest request);
+    TranslationRecordDto translate(TranslationInputDto translationRequestInfoDto, HttpServletRequest request);
 }

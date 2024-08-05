@@ -1,8 +1,8 @@
 package com.task.jtask.service;
 
-import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.model.TranslationRequestInfo;
+import com.task.jtask.dto.TranslationInputDto;
+import com.task.jtask.model.TranslationRecord;
 
 public interface TranslationService {
-    TranslationRequestInfo handleTranslationRequest(TranslationDto translationDto, String ipAddress);
+    TranslationRecord handleTranslationRequest(TranslationInputDto translationInputDto, String ipAddress);
 }

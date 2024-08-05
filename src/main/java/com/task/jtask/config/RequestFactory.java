@@ -1,7 +1,7 @@
 package com.task.jtask.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task.jtask.dto.TranslationDto;
+import com.task.jtask.dto.TranslationInputDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.dto.TranslationRequestExchangeDto;
 import org.springframework.http.HttpEntity;
@@ -22,7 +22,7 @@ public class RequestFactory {
         this.objectMapper = objectMapper;
     }
 
-    public HttpEntity<String> createTranslationRequestEntity(TranslationDto translationDto) {
+    public HttpEntity<String> createTranslationRequestEntity(TranslationInputDto translationInputDto) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Api-Key " + apiConfig.getApiKey());
@@ -30,9 +30,9 @@ public class RequestFactory {
 
             TranslationRequestExchangeDto translationRequestExchangeDto = new TranslationRequestExchangeDto(
                     apiConfig.getFolderId(),
-                    List.of(translationDto.getText()),
-                    translationDto.getTargetLanguageCode(),
-                    translationDto.getSourceLanguageCode()
+                    List.of(translationInputDto.getText()),
+                    translationInputDto.getTargetLanguageCode(),
+                    translationInputDto.getSourceLanguageCode()
             );
 
             String requestBody = objectMapper.writeValueAsString(translationRequestExchangeDto);

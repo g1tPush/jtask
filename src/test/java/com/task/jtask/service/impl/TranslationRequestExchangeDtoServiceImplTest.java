@@ -2,7 +2,7 @@ package com.task.jtask.service.impl;
 
 import com.task.jtask.config.ApiConfig;
 import com.task.jtask.config.RequestFactory;
-import com.task.jtask.dto.TranslationDto;
+import com.task.jtask.dto.TranslationInputDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.dto.TranslationResponseDto;
@@ -43,8 +43,8 @@ class TranslationRequestExchangeDtoServiceImplTest {
     private TranslationRequestServiceImpl translationRequestService;
     private final String apiUrl = "https://translate.api.cloud.yandex.net/translate/v2/translate";
 
-    TranslationDto getTranslationDto() {
-        return TranslationDto.builder()
+    TranslationInputDto getTranslationDto() {
+        return TranslationInputDto.builder()
                 .text("Hello")
                 .sourceLanguageCode("en")
                 .targetLanguageCode("es")

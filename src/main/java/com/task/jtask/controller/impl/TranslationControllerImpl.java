@@ -1,9 +1,9 @@
 package com.task.jtask.controller.impl;
 
 import com.task.jtask.controller.TranslationController;
-import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.dto.TranslationRequestInfoDto;
-import com.task.jtask.model.TranslationRequestInfo;
+import com.task.jtask.dto.TranslationInputDto;
+import com.task.jtask.dto.TranslationRecordDto;
+import com.task.jtask.model.TranslationRecord;
 import com.task.jtask.service.TranslationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,17 +22,17 @@ public class TranslationControllerImpl implements TranslationController {
     }
 
     @PostMapping("/translation/request")
-    public TranslationRequestInfoDto translate(@RequestBody TranslationDto translationDto, HttpServletRequest request) {
+    public TranslationRecordDto translate(@RequestBody TranslationInputDto translationInputDto, HttpServletRequest request) {
 
         String clientIpAddress = request.getRemoteAddr();
 
-        TranslationRequestInfo translationRequestInfo = translationServiceImpl.handleTranslationRequest(
-                translationDto,
+        TranslationRecord translationRecord = translationServiceImpl.handleTranslationRequest(
+                translationInputDto,
                 clientIpAddress
         );
 
-        return TranslationRequestInfoDto.builder()
-                .translatedString(translationRequestInfo.getTranslatedString())
+        return TranslationRecordDto.builder()
+                .translatedString(translationRecord.getTranslatedString())
                 .build();
     }
 }

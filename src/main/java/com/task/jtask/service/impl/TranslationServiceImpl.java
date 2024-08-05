@@ -1,7 +1,7 @@
 package com.task.jtask.service.impl;
 
-import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.model.TranslationRequestInfo;
+import com.task.jtask.dto.TranslationInputDto;
+import com.task.jtask.model.TranslationRecord;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
 import com.task.jtask.dto.TranslationResponseDto;
@@ -31,33 +31,33 @@ public class TranslationServiceImpl implements TranslationService {
         this.translationRequestService = translationRequestService;
     }
 
-    public TranslationRequestInfo handleTranslationRequest(TranslationDto translationDto, String ipAddress) {
-        String translatedText = translateText(translationDto);
+    public TranslationRecord handleTranslationRequest(TranslationInputDto translationInputDto, String ipAddress) {
+        String translatedText = translateText(translationInputDto);
 
-        TranslationRequestInfo translationRequestInfo = TranslationRequestInfo.builder()
+        TranslationRecord translationRecord = TranslationRecord.builder()
                 .ipAddress(ipAddress)
-                .originalStringToTranslate(translationDto.getText())
+                .originalStringToTranslate(translationInputDto.getText())
                 .translatedString(translatedText)
                 .build();
 
-        return translationRepository.saveTranslation(translationRequestInfo);
+        return translationRepository.saveTranslation(translationRecord);
     }
 
-    private String translateText(TranslationDto translationDto) {
-        List<String> words = Arrays.stream(translationDto.getText().split(" "))
+    private String translateText(TranslationInputDto translationInputDto) {
+        List<String> words = Arrays.stream(translationInputDto.getText().split(" "))
                 .filter(word -> !word.isEmpty())
                 .toList();
 
         List<CompletableFuture<TranslationResponseDto>> futures = new ArrayList<>(Collections.nCopies(words.size(), null));
 
         for (int i = 0; i < words.size(); i++) {
-            TranslationDto translationDtoText = TranslationDto.builder()
+            TranslationInputDto translationInputDtoText = TranslationInputDto.builder()
                     .text(words.get(i))
-                    .targetLanguageCode(translationDto.getTargetLanguageCode())
-                    .sourceLanguageCode(translationDto.getSourceLanguageCode())
+                    .targetLanguageCode(translationInputDto.getTargetLanguageCode())
+                    .sourceLanguageCode(translationInputDto.getSourceLanguageCode())
                     .build();
 
-            futures.set(i, CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationDtoText), executorService));
+            futures.set(i, CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationInputDtoText), executorService));
         }
 
         StringBuilder translatedText = new StringBuilder();

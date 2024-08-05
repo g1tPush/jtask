@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TranslationRequestInfoDto {
+public class TranslationRecordDto {
     private final String translatedString;
 }

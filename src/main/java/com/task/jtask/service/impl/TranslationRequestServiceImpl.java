@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.jtask.config.ApiConfig;
 import com.task.jtask.config.RequestFactory;
-import com.task.jtask.dto.TranslationDto;
+import com.task.jtask.dto.TranslationInputDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.dto.TranslationResponseDto;
@@ -31,9 +31,9 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
         this.apiConfig = apiConfig;
     }
 
-    public TranslationResponseDto translate(TranslationDto translationDto) {
+    public TranslationResponseDto translate(TranslationInputDto translationInputDto) {
         try {
-            HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationDto);
+            HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationInputDto);
 
             ResponseEntity<TranslationResponseDto> response = restTemplate.exchange(
                     apiConfig.getApiUrl(),

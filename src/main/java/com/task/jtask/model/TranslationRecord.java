@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TranslationRequestInfo {
+public class TranslationRecord {
     private final Long id;
     private final String ipAddress;
     private final String originalStringToTranslate;

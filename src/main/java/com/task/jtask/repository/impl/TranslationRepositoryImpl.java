@@ -1,6 +1,6 @@
 package com.task.jtask.repository.impl;
 
-import com.task.jtask.model.TranslationRequestInfo;
+import com.task.jtask.model.TranslationRecord;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
 import org.springframework.stereotype.Repository;
@@ -17,10 +17,10 @@ public class TranslationRepositoryImpl implements TranslationRepository {
         this.dataSource = dataSource;
     }
 
-    public TranslationRequestInfo saveTranslation(TranslationRequestInfo translationRequestInfo) {
-        String ipAddress = translationRequestInfo.getIpAddress();
-        String originalStringToTranslate = translationRequestInfo.getOriginalStringToTranslate();
-        String translatedString = translationRequestInfo.getTranslatedString();
+    public TranslationRecord saveTranslation(TranslationRecord translationRecord) {
+        String ipAddress = translationRecord.getIpAddress();
+        String originalStringToTranslate = translationRecord.getOriginalStringToTranslate();
+        String translatedString = translationRecord.getTranslatedString();
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
@@ -37,7 +37,7 @@ public class TranslationRepositoryImpl implements TranslationRepository {
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     Long generatedId = generatedKeys.getLong(1);
-                    return TranslationRequestInfo.builder()
+                    return TranslationRecord.builder()
                             .id(generatedId)
                             .ipAddress(ipAddress)
                             .originalStringToTranslate(originalStringToTranslate)
