@@ -9,7 +9,10 @@ import com.task.jtask.service.TranslationRequestService;
 import com.task.jtask.service.TranslationService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -41,25 +44,25 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     private String translateText(TranslationDto translationDto) {
-        String[] words = Arrays.stream(translationDto.getText().split(" "))
+        List<String> words = Arrays.stream(translationDto.getText().split(" "))
                 .filter(word -> !word.isEmpty())
-                .toArray(String[]::new);
+                .toList();
 
-        CompletableFuture<TranslationResponse>[] futures = new CompletableFuture[words.length];
+        List<CompletableFuture<TranslationResponse>> futures = new ArrayList<>(Collections.nCopies(words.size(), null));
 
-        for (int i = 0; i < words.length; i++) {
+        for (int i = 0; i < words.size(); i++) {
             TranslationDto translationDtoText = TranslationDto.builder()
-                    .text(words[i])
+                    .text(words.get(i))
                     .targetLanguageCode(translationDto.getTargetLanguageCode())
                     .sourceLanguageCode(translationDto.getSourceLanguageCode())
                     .build();
 
-            futures[i] = CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationDtoText), executorService);
+            futures.set(i, CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationDtoText), executorService));
         }
 
         StringBuilder translatedText = new StringBuilder();
 
-        CompletableFuture.allOf(futures).join();
+        CompletableFuture.allOf(futures.get(0)).join();
 
         for (CompletableFuture<TranslationResponse> future : futures) {
             try {
