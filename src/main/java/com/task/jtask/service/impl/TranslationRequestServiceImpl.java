@@ -23,8 +23,9 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
     private final ApiConfig apiConfig;
     private final RequestFactory requestFactory;
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    TranslationRequestServiceImpl(ApiConfig apiConfig, RequestFactory requestFactory, RestTemplate restTemplate) {
+    public TranslationRequestServiceImpl(ApiConfig apiConfig, RequestFactory requestFactory, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.requestFactory = requestFactory;
         this.apiConfig = apiConfig;
@@ -44,7 +45,6 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
             return response.getBody();
         } catch (HttpClientErrorException e) {
             String errorResponseBody = e.getResponseBodyAsString();
-            ObjectMapper objectMapper = new ObjectMapper();
             String message;
 
             try {
