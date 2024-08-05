@@ -6,6 +6,7 @@ import com.task.jtask.dto.TranslationRequestInfoDto;
 import com.task.jtask.entity.TranslationRequestInfo;
 import com.task.jtask.service.TranslationService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class TranslationControllerImpl implements TranslationController {
 
-    TranslationService translationServiceImpl;
+    private final TranslationService translationServiceImpl;
 
-    TranslationControllerImpl(TranslationService translationServiceImpl) {
+    public TranslationControllerImpl(TranslationService translationServiceImpl) {
         this.translationServiceImpl = translationServiceImpl;
     }
 
-    @PostMapping("/translations")
+    @PostMapping("/translation/request")
     public TranslationRequestInfoDto translate(@RequestBody TranslationDto translationDto, HttpServletRequest request) {
 
         String clientIpAddress = request.getRemoteAddr();
