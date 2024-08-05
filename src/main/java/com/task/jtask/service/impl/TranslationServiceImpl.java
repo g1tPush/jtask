@@ -65,7 +65,7 @@ public class TranslationServiceImpl implements TranslationService {
             try {
                 translatedText.append(future.get().getTranslations().get(0).getText()).append(" ");
             } catch (InterruptedException | ExecutionException e) {
-                throw new GlobalException("Parsing error");
+                throw new GlobalException(e.getMessage());
             }
         }
 

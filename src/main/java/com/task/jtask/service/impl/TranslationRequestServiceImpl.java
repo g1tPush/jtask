@@ -58,7 +58,7 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
         } catch (HttpServerErrorException e) {
             throw new GlobalException("Server error");
         } catch (Exception e) {
-            throw new GlobalException("Unexpected error occurred");
+            throw new GlobalException(e.getMessage());
         }
     }
 }
