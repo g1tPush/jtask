@@ -1,28 +1,28 @@
 package com.task.jtask.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApiConfig {
+    @Value("${api.folderid}")
+    private String folderId;
 
-    private final Dotenv dotenv;
+    @Value("${api.key}")
+    private String apiKey;
 
-    private final String URL = "https://translate.api.cloud.yandex.net/translate/v2/translate";
+    @Value("${api.url}")
+    private String url;
 
-    public ApiConfig(Dotenv dotenv) {
-        this.dotenv = dotenv;
+    public String getFolderId() {
+        return folderId;
     }
 
     public String getApiKey() {
-        return dotenv.get("API_KEY");
-    }
-
-    public String getFolderId() {
-        return dotenv.get("FOLDER_ID");
+        return apiKey;
     }
 
     public String getApiUrl() {
-        return URL;
+        return url;
     }
 }
