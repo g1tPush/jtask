@@ -51,13 +51,13 @@ public class TranslationServiceImpl implements TranslationService {
         List<CompletableFuture<TranslationResponseDto>> futures = new ArrayList<>(Collections.nCopies(words.size(), null));
 
         for (int i = 0; i < words.size(); i++) {
-            TranslationInputDto translationInputDtoText = TranslationInputDto.builder()
+            TranslationInputDto translationInputWithOneWord = TranslationInputDto.builder()
                     .text(words.get(i))
                     .targetLanguageCode(translationInputDto.getTargetLanguageCode())
                     .sourceLanguageCode(translationInputDto.getSourceLanguageCode())
                     .build();
 
-            futures.set(i, CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationInputDtoText), executorService));
+            futures.set(i, CompletableFuture.supplyAsync(() -> translationRequestService.translate(translationInputWithOneWord), executorService));
         }
 
         StringBuilder translatedText = new StringBuilder();
