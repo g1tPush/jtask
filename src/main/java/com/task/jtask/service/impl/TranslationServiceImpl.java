@@ -23,7 +23,7 @@ public class TranslationServiceImpl implements TranslationService {
     private final int threadPoolSize = 10;
     private final ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
-    TranslationServiceImpl(TranslationRepository translationRepository, TranslationRequestService translationRequestService) {
+    public TranslationServiceImpl(TranslationRepository translationRepository, TranslationRequestService translationRequestService) {
         this.translationRepository = translationRepository;
         this.translationRequestService = translationRequestService;
     }
