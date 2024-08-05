@@ -1,4 +1,4 @@
-package com.task.jtask.entity;
+package com.task.jtask.model;
 
 import lombok.Builder;
 import lombok.Data;

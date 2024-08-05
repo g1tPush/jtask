@@ -1,7 +1,7 @@
 package com.task.jtask.service.impl;
 
 import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.entity.TranslationRequestInfo;
+import com.task.jtask.model.TranslationRequestInfo;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
 import com.task.jtask.response.TranslationResponse;
