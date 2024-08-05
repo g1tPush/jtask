@@ -1,4 +1,4 @@
-package com.task.jtask.exceptions;
+package com.task.jtask.exception;
 
 import org.springframework.http.HttpStatusCode;
 

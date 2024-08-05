@@ -1,7 +1,7 @@
 package com.task.jtask.repository.impl;
 
 import com.task.jtask.entity.TranslationRequestInfo;
-import com.task.jtask.exceptions.GlobalException;
+import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
 import org.springframework.stereotype.Repository;
 

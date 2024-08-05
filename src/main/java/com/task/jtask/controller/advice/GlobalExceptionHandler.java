@@ -1,7 +1,7 @@
 package com.task.jtask.controller.advice;
 
-import com.task.jtask.exceptions.GlobalException;
-import com.task.jtask.exceptions.YandexApiTranslationException;
+import com.task.jtask.exception.GlobalException;
+import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

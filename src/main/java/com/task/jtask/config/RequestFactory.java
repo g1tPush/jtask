@@ -2,7 +2,7 @@ package com.task.jtask.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.jtask.dto.TranslationDto;
-import com.task.jtask.exceptions.GlobalException;
+import com.task.jtask.exception.GlobalException;
 import com.task.jtask.request.TranslationRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

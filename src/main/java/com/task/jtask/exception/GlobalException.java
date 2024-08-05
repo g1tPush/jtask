@@ -1,4 +1,4 @@
-package com.task.jtask.exceptions;
+package com.task.jtask.exception;
 
 public class GlobalException extends RuntimeException {
     public GlobalException(String message) {
