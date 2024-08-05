@@ -42,7 +42,7 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
             );
 
             return response.getBody();
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
+        } catch (HttpClientErrorException e) {
             String errorResponseBody = e.getResponseBodyAsString();
             ObjectMapper objectMapper = new ObjectMapper();
             String message;
@@ -55,6 +55,10 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
             }
 
             throw new YandexApiTranslationException(message, e.getStatusCode());
+        } catch (HttpServerErrorException e) {
+            throw new GlobalException("Server error");
+        } catch (Exception e) {
+            throw new GlobalException("Unexpected error occurred");
         }
     }
 }
