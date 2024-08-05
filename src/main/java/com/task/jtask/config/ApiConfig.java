@@ -8,6 +8,8 @@ public class ApiConfig {
 
     private final Dotenv dotenv;
 
+    private final String URL = "https://translate.api.cloud.yandex.net/translate/v2/translate";
+
     public ApiConfig(Dotenv dotenv) {
         this.dotenv = dotenv;
     }
@@ -19,5 +21,8 @@ public class ApiConfig {
     public String getFolderId() {
         return dotenv.get("FOLDER_ID");
     }
-    public final String URL = "https://translate.api.cloud.yandex.net/translate/v2/translate";
+
+    public String getApiUrl() {
+        return URL;
+    }
 }

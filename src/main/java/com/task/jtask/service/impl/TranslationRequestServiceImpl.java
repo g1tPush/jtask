@@ -35,7 +35,7 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
             HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationDto);
 
             ResponseEntity<TranslationResponse> response = restTemplate.exchange(
-                    apiConfig.URL,
+                    apiConfig.getApiUrl(),
                     HttpMethod.POST,
                     entity,
                     TranslationResponse.class
