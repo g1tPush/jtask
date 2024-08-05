@@ -43,7 +43,8 @@ public class TranslationServiceImpl implements TranslationService {
     private String translateText(TranslationDto translationDto) {
         String[] words = Arrays.stream(translationDto.getText().split(" "))
                 .filter(word -> !word.isEmpty())
-                .toArray(String[]::new);;
+                .toArray(String[]::new);
+
         CompletableFuture<TranslationResponse>[] futures = new CompletableFuture[words.length];
 
         for (int i = 0; i < words.length; i++) {
