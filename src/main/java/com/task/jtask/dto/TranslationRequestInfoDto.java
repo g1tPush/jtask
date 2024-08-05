@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 @Builder
 public class TranslationRequestInfoDto {
-    private String translatedString;
+    private final String translatedString;
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class TranslationDto {
-    private String text;
-    private String targetLanguageCode;
-    private String sourceLanguageCode;
+    private final String text;
+    private final String targetLanguageCode;
+    private final String sourceLanguageCode;
 }

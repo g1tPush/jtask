@@ -1,14 +1,13 @@
 package com.task.jtask.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class TranslationRequestInfo {
-    private Long id;
-    private String ipAddress;
-    private String originalStringToTranslate;
-    private String translatedString;
+    private final Long id;
+    private final String ipAddress;
+    private final String originalStringToTranslate;
+    private final String translatedString;
 }

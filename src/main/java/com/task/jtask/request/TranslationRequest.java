@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class TranslationRequest {
-    private String folderId;
-    private List<String> texts;
-    private String targetLanguageCode;
-    private String sourceLanguageCode;
+    private final String folderId;
+    private final List<String> texts;
+    private final String targetLanguageCode;
+    private final String sourceLanguageCode;
 }
