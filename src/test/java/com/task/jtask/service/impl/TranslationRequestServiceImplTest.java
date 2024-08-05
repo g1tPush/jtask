@@ -41,30 +41,26 @@ class TranslationRequestServiceImplTest {
 
     @InjectMocks
     private TranslationRequestServiceImpl translationRequestService;
-    private TranslationDto translationDto;
-    private HttpEntity<String> entity;
     private final String apiUrl = "https://translate.api.cloud.yandex.net/translate/v2/translate";
 
-    @BeforeEach
-    void setUp() {
-        translationDto = TranslationDto.builder()
+    TranslationDto getTranslationDto() {
+        return TranslationDto.builder()
                 .text("Hello")
                 .sourceLanguageCode("en")
                 .targetLanguageCode("es")
                 .build();
+    }
 
-        entity = new HttpEntity<>("");
-
+    @BeforeEach
+    void setUp() {
         when(apiConfig.getApiUrl()).thenReturn(apiUrl);
-        when(requestFactory.createTranslationRequestEntity(translationDto)).thenReturn(entity);
+        when(requestFactory.createTranslationRequestEntity(getTranslationDto())).thenReturn(new HttpEntity<>(""));
     }
 
     @Test
     void translate_Success() {
-        TranslationResponse expectedResponse = new TranslationResponse();
-        TranslationResponse.Translation translation = new TranslationResponse.Translation();
-        translation.setText("Hola");
-        expectedResponse.setTranslations(Collections.singletonList(translation));
+        TranslationResponse.Translation translation = new TranslationResponse.Translation("Hola");
+        TranslationResponse expectedResponse = new TranslationResponse(Collections.singletonList(translation));
 
         when(restTemplate.exchange(
                 anyString(),
@@ -73,7 +69,7 @@ class TranslationRequestServiceImplTest {
                 eq(TranslationResponse.class)
         )).thenReturn(ResponseEntity.ok(expectedResponse));
 
-        TranslationResponse actualResponse = translationRequestService.translate(translationDto);
+        TranslationResponse actualResponse = translationRequestService.translate(getTranslationDto());
 
         assertEquals(expectedResponse, actualResponse);
         assertEquals("Hola", actualResponse.getTranslations().get(0).getText());
@@ -95,7 +91,7 @@ class TranslationRequestServiceImplTest {
         )).thenThrow(clientException);
 
         YandexApiTranslationException exception = assertThrows(YandexApiTranslationException.class, () -> {
-            translationRequestService.translate(translationDto);
+            translationRequestService.translate(getTranslationDto());
         });
 
         assertEquals(message, exception.getMessage());
@@ -117,7 +113,7 @@ class TranslationRequestServiceImplTest {
         )).thenThrow(serverException);
 
         GlobalException exception = assertThrows(GlobalException.class, () -> {
-            translationRequestService.translate(translationDto);
+            translationRequestService.translate(getTranslationDto());
         });
 
         assertEquals(message, exception.getMessage());
@@ -137,7 +133,7 @@ class TranslationRequestServiceImplTest {
         )).thenThrow(clientException);
 
         GlobalException exception = assertThrows(GlobalException.class, () -> {
-            translationRequestService.translate(translationDto);
+            translationRequestService.translate(getTranslationDto());
         });
 
         assertEquals("Parsing error", exception.getMessage());
