@@ -3,18 +3,17 @@ package com.task.jtask.repository.impl;
 import com.task.jtask.entity.TranslationRequestInfo;
 import com.task.jtask.exceptions.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.sql.*;
 
 @Repository
 public class TranslationRepositoryImpl implements TranslationRepository {
-    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
-    public TranslationRepositoryImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public TranslationRepositoryImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public TranslationRequestInfo saveTranslation(TranslationRequestInfo translationRequestInfo) {
@@ -24,27 +23,33 @@ public class TranslationRepositoryImpl implements TranslationRepository {
         String originalStringToTranslate = translationRequestInfo.getOriginalStringToTranslate();
         String translatedString = translationRequestInfo.getTranslatedString();
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        try {
-            jdbcTemplate.update(connection -> {
-                var ps = connection.prepareStatement(sql, new String[]{"id"});
-                ps.setString(1, ipAddress);
-                ps.setString(2, originalStringToTranslate);
-                ps.setString(3, translatedString);
-                return ps;
-            }, keyHolder);
-        } catch (DataAccessException e) {
-            throw new GlobalException(e.getMessage());
+            ps.setString(1, ipAddress);
+            ps.setString(2, originalStringToTranslate);
+            ps.setString(3, translatedString);
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new GlobalException("Creating translation failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    Long generatedId = generatedKeys.getLong(1);
+                    return TranslationRequestInfo.builder()
+                            .id(generatedId)
+                            .ipAddress(ipAddress)
+                            .originalStringToTranslate(originalStringToTranslate)
+                            .translatedString(translatedString)
+                            .build();
+                } else {
+                    throw new GlobalException("Creating translation failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new GlobalException("Database error: " + e.getMessage());
         }
-
-        Long generatedId = keyHolder.getKey().longValue();
-
-        return TranslationRequestInfo.builder()
-                .id(generatedId)
-                .ipAddress(ipAddress)
-                .originalStringToTranslate(originalStringToTranslate)
-                .translatedString(translatedString)
-                .build();
     }
 }
