@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class TranslationRequestEchangeDto {
+public class TranslationRequestExchangeDto {
     private final String folderId;
     private final List<String> texts;
     private final String targetLanguageCode;

@@ -29,7 +29,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class TranslationRequestEchangeDtoServiceImplTest {
+class TranslationRequestExchangeDtoServiceImplTest {
     @Mock
     private ApiConfig apiConfig;
 
