@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @TestPropertySource("classpath:application.properties")
-class TranslationRequestExchangeDtoServiceImplTest {
+class TranslationRequestServiceImplTest {
     @Mock
     private ApiConfig apiConfig;
 
