@@ -2,6 +2,7 @@ package com.task.jtask.controller.advice;
 
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
+import com.task.jtask.utils.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,6 +32,8 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
+
+        errors.put("code", ErrorCode.INVALID_REQUEST);
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }

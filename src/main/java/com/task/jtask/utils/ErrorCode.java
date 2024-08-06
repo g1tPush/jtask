@@ -7,4 +7,5 @@ public final class ErrorCode {
     public static final String TASK_EXECUTION_FAILED = "TASK_EXECUTION_FAILED";
     public static final String SERVER_ERROR = "SERVER_ERROR";
     public static final String UNKNOWN_ERROR = "UNKNOWN_ERROR";
+    public static final String INVALID_REQUEST = "INVALID_REQUEST";
 }
