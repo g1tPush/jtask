@@ -35,7 +35,8 @@ API для перевода
 **Неуспешный ответ:**
 ```json
 {
-    "message": "string"
+    "message": "string",
+    "code": "string"
 }
 ```
 
