@@ -6,6 +6,7 @@ import com.task.jtask.dto.TranslationInputDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.dto.TranslationResponseDto;
+import com.task.jtask.utils.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,8 +84,9 @@ class TranslationRequestExchangeDtoServiceImplTest {
     @Test
     void translate_HttpClientErrorException() {
         String message = "Invalid request parameters";
+        String code = "3";
 
-        String errorResponse = "{\"message\": \"%s\"}".formatted(message);
+        String errorResponse = "{\"code\": %s, \"message\": \"%s\"}".formatted(code, message);
         HttpClientErrorException clientException = HttpClientErrorException.create(
                 HttpStatus.BAD_REQUEST, "Bad Request", null, errorResponse.getBytes(), null);
 
@@ -101,14 +103,16 @@ class TranslationRequestExchangeDtoServiceImplTest {
 
         assertEquals(message, exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatusCode());
+        assertEquals(code, exception.getCode());
     }
 
     @Test
     void translate_HttpServerErrorException() {
         String message = "Server error";
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         HttpServerErrorException serverException = HttpServerErrorException.create(
-                HttpStatus.INTERNAL_SERVER_ERROR, message, null, null, null);
+                status, message, null, null, null);
 
         when(restTemplate.exchange(
                 anyString(),
@@ -121,7 +125,8 @@ class TranslationRequestExchangeDtoServiceImplTest {
             translationRequestService.translate(getTranslationDto());
         });
 
-        assertEquals(message, exception.getMessage());
+        assertEquals("%d %s".formatted(status.value(), message), exception.getMessage());
+        assertEquals(ErrorCode.SERVER_ERROR, exception.getCode());
     }
 
     @Test
@@ -142,5 +147,6 @@ class TranslationRequestExchangeDtoServiceImplTest {
         });
 
         assertEquals("Parsing error", exception.getMessage());
+        assertEquals(ErrorCode.PARSING_ERROR, exception.getCode());
     }
 }
