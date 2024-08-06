@@ -6,6 +6,7 @@ import com.task.jtask.dto.TranslationRecordDto;
 import com.task.jtask.model.TranslationRecord;
 import com.task.jtask.service.TranslationService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class TranslationControllerImpl implements TranslationController {
 
     private final TranslationService translationServiceImpl;
@@ -26,10 +28,14 @@ public class TranslationControllerImpl implements TranslationController {
 
         String clientIpAddress = request.getRemoteAddr();
 
+        log.info("Request received with body: {}", translationInputDto);
+
         TranslationRecord translationRecord = translationServiceImpl.handleTranslationRequest(
                 translationInputDto,
                 clientIpAddress
         );
+
+        log.info("Create TranslationRecord: {}", translationRecord);
 
         return TranslationRecordDto.builder()
                 .translatedString(translationRecord.getTranslatedString())

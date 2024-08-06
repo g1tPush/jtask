@@ -7,6 +7,7 @@ import com.task.jtask.repository.TranslationRepository;
 import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
 import com.task.jtask.service.TranslationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
+@Slf4j
 public class TranslationServiceImpl implements TranslationService {
 
     private final TranslationRequestService translationRequestService;
@@ -44,6 +46,8 @@ public class TranslationServiceImpl implements TranslationService {
     }
 
     private String translateText(TranslationInputDto translationInputDto) {
+        log.info("Start text translation: {}", translationInputDto);
+
         List<String> words = Arrays.stream(translationInputDto.getText().split(" "))
                 .filter(word -> !word.isEmpty())
                 .toList();
@@ -68,6 +72,8 @@ public class TranslationServiceImpl implements TranslationService {
             try {
                 translatedText.append(future.get().getTranslations().get(0).getText()).append(" ");
             } catch (InterruptedException | ExecutionException e) {
+                log.debug("Translated string parsing error: {}", e.getMessage());
+
                 throw new GlobalException(e.getMessage());
             }
         }

@@ -9,6 +9,7 @@ import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class TranslationRequestServiceImpl implements TranslationRequestService {
 
     private final ApiConfig apiConfig;
@@ -35,6 +37,8 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
         try {
             HttpEntity<String> entity = requestFactory.createTranslationRequestEntity(translationInputDto);
 
+            log.info("Start text translation");
+
             ResponseEntity<TranslationResponseDto> response = restTemplate.exchange(
                     apiConfig.getApiUrl(),
                     HttpMethod.POST,
@@ -42,8 +46,11 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
                     TranslationResponseDto.class
             );
 
+            log.info("Translation result: {}", response.getBody());
+
             return response.getBody();
         } catch (HttpClientErrorException e) {
+            log.debug("HttpClientErrorException: {} {}", e.toString(), translationInputDto);
             String errorResponseBody = e.getResponseBodyAsString();
             String message;
 
@@ -51,13 +58,19 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
                 JsonNode jsonNode = objectMapper.readTree(errorResponseBody);
                 message = jsonNode.get("message").asText();
             } catch (Exception ex) {
+                log.debug("HttpClientErrorException parsing: {} {}", ex, translationInputDto);
+
                 throw new GlobalException("Parsing error");
             }
 
             throw new YandexApiTranslationException(message, e.getStatusCode());
         } catch (HttpServerErrorException e) {
+            log.debug("HttpServerErrorException: {} {}", e, translationInputDto);
+
             throw new GlobalException("Server error");
         } catch (Exception e) {
+            log.debug("Unknown error: {}", e, translationInputDto);
+
             throw new GlobalException(e.getMessage());
         }
     }
