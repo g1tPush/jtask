@@ -16,13 +16,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(YandexApiTranslationException.class)
     public ResponseEntity<ErrorResponse> yandexApiException(YandexApiTranslationException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getCode());
         return new ResponseEntity<>(errorResponse, ex.getHttpStatusCode());
     }
 
     @ExceptionHandler(GlobalException.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(GlobalException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("Internal Server Error: " + ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getCode());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -31,6 +31,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
+
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 

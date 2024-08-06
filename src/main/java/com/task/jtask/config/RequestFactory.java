@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.jtask.dto.TranslationInputDto;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.dto.TranslationRequestExchangeDto;
+import com.task.jtask.utils.ErrorCode;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -39,7 +40,7 @@ public class RequestFactory {
 
             return new HttpEntity<>(requestBody, headers);
         } catch (Exception e) {
-            throw new GlobalException("Parsing error");
+            throw new GlobalException(e.getMessage(), ErrorCode.PARSING_ERROR);
         }
     }
 }

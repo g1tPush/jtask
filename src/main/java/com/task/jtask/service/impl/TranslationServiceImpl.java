@@ -7,6 +7,7 @@ import com.task.jtask.repository.TranslationRepository;
 import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
 import com.task.jtask.service.TranslationService;
+import com.task.jtask.utils.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -71,10 +72,12 @@ public class TranslationServiceImpl implements TranslationService {
         for (CompletableFuture<TranslationResponseDto> future : futures) {
             try {
                 translatedText.append(future.get().getTranslations().get(0).getText()).append(" ");
-            } catch (InterruptedException | ExecutionException e) {
-                log.debug("Translated string parsing error: {}", e.getMessage());
-
-                throw new GlobalException(e.getMessage());
+            } catch (InterruptedException e) {
+                log.debug("Parsing error: {}", e.getMessage());
+                throw new GlobalException(e.getMessage(), ErrorCode.TASK_INTERRUPTED);
+            } catch (ExecutionException e) {
+                log.debug("Parsing error: {}", e.getMessage());
+                throw new GlobalException(e.getMessage(), ErrorCode.TASK_EXECUTION_FAILED);
             }
         }
 

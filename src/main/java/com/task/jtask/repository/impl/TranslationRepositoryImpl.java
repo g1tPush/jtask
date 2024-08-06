@@ -3,6 +3,7 @@ package com.task.jtask.repository.impl;
 import com.task.jtask.model.TranslationRecord;
 import com.task.jtask.exception.GlobalException;
 import com.task.jtask.repository.TranslationRepository;
+import com.task.jtask.utils.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +37,7 @@ public class TranslationRepositoryImpl implements TranslationRepository {
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
                 log.debug("Creating translation failed, no rows affected.");
-                throw new GlobalException("Creating translation failed, no rows affected.");
+                throw new GlobalException("No rows affected", ErrorCode.DATABASE_ERROR);
             }
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -51,12 +52,12 @@ public class TranslationRepositoryImpl implements TranslationRepository {
                             .build();
                 } else {
                     log.debug("Creating translation failed, no ID obtained.");
-                    throw new GlobalException("Creating translation failed, no ID obtained.");
+                    throw new GlobalException("Creating translation failed, no ID obtained.", ErrorCode.DATABASE_ERROR);
                 }
             }
         } catch (SQLException e) {
             log.debug("Database error occurred while saving translation: {}", e.getMessage());
-            throw new GlobalException("Database error: " + e.getMessage());
+            throw new GlobalException(e.getMessage(), ErrorCode.DATABASE_ERROR);
         }
     }
 }

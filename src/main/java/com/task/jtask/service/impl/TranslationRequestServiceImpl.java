@@ -9,6 +9,7 @@ import com.task.jtask.exception.GlobalException;
 import com.task.jtask.exception.YandexApiTranslationException;
 import com.task.jtask.dto.TranslationResponseDto;
 import com.task.jtask.service.TranslationRequestService;
+import com.task.jtask.utils.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -50,28 +51,30 @@ public class TranslationRequestServiceImpl implements TranslationRequestService 
 
             return response.getBody();
         } catch (HttpClientErrorException e) {
-            log.debug("HttpClientErrorException: {} {}", e.toString(), translationInputDto);
+            log.debug("HttpClientErrorException: {} {}", e, translationInputDto);
             String errorResponseBody = e.getResponseBodyAsString();
             String message;
+            String code;
 
             try {
                 JsonNode jsonNode = objectMapper.readTree(errorResponseBody);
                 message = jsonNode.get("message").asText();
+                code = jsonNode.get("code").asText();
             } catch (Exception ex) {
                 log.debug("HttpClientErrorException parsing: {} {}", ex, translationInputDto);
 
-                throw new GlobalException("Parsing error");
+                throw new GlobalException("Parsing error", ErrorCode.PARSING_ERROR);
             }
 
-            throw new YandexApiTranslationException(message, e.getStatusCode());
+            throw new YandexApiTranslationException(message, e.getStatusCode(), code);
         } catch (HttpServerErrorException e) {
             log.debug("HttpServerErrorException: {} {}", e, translationInputDto);
 
-            throw new GlobalException("Server error");
+            throw new GlobalException(e.getMessage(), ErrorCode.SERVER_ERROR);
         } catch (Exception e) {
-            log.debug("Unknown error: {}", e, translationInputDto);
+            log.debug("Unknown error: {} {}", e, translationInputDto);
 
-            throw new GlobalException(e.getMessage());
+            throw new GlobalException(e.getMessage(), ErrorCode.UNKNOWN_ERROR);
         }
     }
 }
